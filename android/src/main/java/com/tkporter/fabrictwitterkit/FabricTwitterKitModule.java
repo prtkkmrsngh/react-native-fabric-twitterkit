@@ -216,7 +216,7 @@ public class FabricTwitterKitModule extends ReactContextBaseJavaModule implement
 
     // example users/show service endpoint
     interface CustomService {
-        @GET("/1.1/users/show.json")
+        @GET("/1.1/account/verify_credentials.json?include_entities=false&skip_status=true&include_email=true")
         Call<User> show(@Query("user_id") Long id);
     }
 
