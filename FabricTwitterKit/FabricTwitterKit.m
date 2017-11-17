@@ -68,8 +68,19 @@ RCT_EXPORT_METHOD(fetchProfile:(RCTResponseSenderBlock)callback)
                                            JSONObjectWithData:data
                                            options:0
                                            error:&jsonError];
-                     NSLog(@"%@",[json description]);
-                     callback(@[[NSNull null], json]);
+                     
+                     TWTRAPIClient *client = [TWTRAPIClient clientWithCurrentUser];
+                     [client requestEmailForCurrentUser:^(NSString *email, NSError *error) {
+                      if (email) {
+                          NSMutableDictionary *newJson = [json mutableCopy];
+                          [newJson setValue:email forKey:@"email"];
+                          
+                          NSLog(@"%@",[newJson description]);
+                          callback(@[[NSNull null], newJson]);
+                      } else {
+                          NSLog(@"error: %@", [error localizedDescription]);
+                      }
+                     }];
                  }
                  else {
                      NSLog(@"Error code: %ld | Error description: %@", (long)[connectionError code], [connectionError localizedDescription]);
